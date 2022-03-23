@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" async 
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+<body>
+
+    \begin{align}
+
+
+
+
+
+    \displaystyle \frac{1}{2}\cdot1\cdot1\cdot\sin x &lt; 1\cdot1\cdot\pi\cdot\frac{x}{2\pi} &lt; 1\cdot \tan x \cdot\frac{1}{2}\\
+                \displaystyle \Longleftrightarrow \sin x &lt; x &lt; \tan x\\
+                \displaystyle \Longleftrightarrow 1 &lt; \frac{x}{\sin x} &lt; \frac{1}{\cos x}\\
+                \displaystyle \Longleftrightarrow \cos x &lt; \frac{\sin x}{x} &lt; 1\\
+                ここで，\displaystyle\lim_{x\to +0}\cos x=1 なので\\
+                \displaystyle\lim_{x\to +0}\dfrac{\sin x}{x}=1\\
+                (ii) x &lt; 0 で十分小さいとき，x=-t とおくと\\
+                \displaystyle\lim_{x\to -0}\dfrac{\sin x}{x}=\lim_{t\to +0}\dfrac{\sin (-t)}{-t}=\lim_{t\to +0}\dfrac{\sin t}{t}=1\\
+                (i)(ii)より，右側極限と左側極限が一致するので\\
+                \displaystyle\lim_{x\to 0}\dfrac{\sin x}{x}=1\\
+    
+
+f(x) = \sin x\\ &amp;\hspace{100cm}\end{align}
+\begin{align}
+とおくと\\
+f^{\prime}(x)= \cos x,
+f^{\prime\prime}(x)= -\sin x, 
+f^{\prime\prime\prime}(x)= -\cos x ,
+f^{(4)}(x)= \sin x ,
+f^{(5)}(x)= \cos x \cdots\\
+となるから\\
+f(0)= 0 ,
+f^{\prime}(0)= 1 ,
+f^{\prime\prime}(0)= 0 ,
+f^{\prime\prime\prime}(0)= -1 ,
+f^{(4)}(0)= 0 ,
+f^{(5)}(0)= 1 \cdots\\
+となり\\
+\sin x \: &= 0 + 1 \cdot x + \frac{0}{2!}x^2 + \frac{(-1)}{3!}x^3 + \frac{0}{4!}x^4 + \frac{1}{5!}x^5 + \frac{0}{6!}x^6 + \frac{(-1)}{7!}x^7 + \cdots \\
+&= x - \frac{1}{3!}x^3 + \frac{1}{5!}x^5 - \frac{1}{7!}x^7 + \cdots \\
+&= \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!}x^{2n+1}\\
+となる. また,
+a_n = \frac{(-1)^n}{(2n+1)!}, \quad
+a_{n+1} = \frac{(-1)^{n+1}}{(2n+3)!}
+とすると\\
+L \: &= \lim_{n \rightarrow \infty} \Big| \frac{a_{n+1}}{a_n} \Big | \\
+& = \lim_{n \rightarrow \infty} \Big| \frac{(-1)^{n+1}}{(2n+3)!} \Bigg/\frac{(-1)^n}{(2n+1)!} \Big | \\
+& = \lim_{n \rightarrow \infty} \Big| \frac{(-1)^{n+1}}{(-1)^n} \frac{(2n+1)!}{(2n+3)!} \Big | \\
+& = \lim_{n \rightarrow \infty} \Big| -1 \cdot \frac{1}{(2n+2)(2n+3)} \Big | \\
+& = 0\\となるから, ダランベールの判定法より, 収束半径は\\
+R = \infty.\\
+\\ \\
+\sin{x} の導関数は,微分の定義より\\
+\displaystyle\lim_{h\to 0}\dfrac{\sin (x+h)-\sin x}{h}\\となり, 加法定理を用いると\\
+\displaystyle\lim_{h\to 0}\dfrac{\sin x(\cos h-1)+\cos x\sin h}{h}
+=\displaystyle\lim_{h\to 0}\left(\sin x\cdot\dfrac{\cos h-1}{h}+\cos x\cdot\dfrac{\sin h}{h}\right)\\となる.ここで
+\displaystyle\lim_{h\to 0}\dfrac{\cos h-1}{h}=0と
+\displaystyle\lim_{h\to 0}\dfrac{\sin h}{h}=1を用いると\\
+0+\cos x\cdot 1=\cos x\\となる.
+
+
+
+
+
+    デデキントのイータ関数\\\\
+    \eta(\tau)=e^{\pi{i}\tau/12}\prod_{m=1}^{\infty}(1-e^{2\pi{i}\tau{m}})\\\\
+    ディリクレのイータ関数\\\\
+    \eta(s)=\sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n^s}=(1-2^{1-s})\zeta(s)\\\\
+    ヘヴィサイドの階段関数\\\\
+    {\displaystyle U(x)={\begin{cases}1&(x>0)\\0&(x\leq 0)\end{cases}}}\\\\
+    デルタ関数\\\\
+    \int _{-\infty }^{\infty }f(x)\delta (x)\,dx=f(0)\\\\
+    正弦積分\\\\
+    \mathrm{Si}\,(x)=\int_{0}^{x}\frac{\sin t}{t}dt\\\\
+    余弦積分\\\\
+    \mathrm{Ci}\,(x)=-\int_{x}^{\infty}\frac{\cos t}{t}dt\\\\
+    双曲線正弦積分\\\\
+    \mathrm{Shi}\,(x)=\int_{0}^{x}\frac{\sinh t}{t}dt\\\\
+    双曲線余弦積分\\\\
+    \mathrm{Chi}\,(x)=\int_{x}^{\infty}\frac{\cosh t}{t}dt\\\\
+    指数積分\\\\
+    \mathrm{Ei}\,(x)=-\int_{-x}^{\infty}\frac{e^{-t}}{t}dt\\\\
+    ランベルトのW関数\\\\
+    W(z e^{z})=z\\\\
+    第一種ガンマ関数\\\\
+    \gamma (a,x)=\int _{0}^{x}t^{a-1}\,e^{-t}\,dt\\\\
+    {\displaystyle \operatorname {Ai} (x)={\dfrac {1}{\pi }}\int _{0}^{\infty }\cos \left({\dfrac {t^{3}}{3}}+xt\right)\,dt}\\\\
+    {\displaystyle \operatorname {Bi} (x)={\frac {1}{\pi }}\int _{0}^{\infty }\left[\exp \left(-{\tfrac {t^{3}}{3}}+xt\right)+\sin \left({\tfrac {t^{3}}{3}}+xt\right)\,\right]dt.}\\\\
+    {\displaystyle \Gamma (z)=\int _{0}^{\infty }t^{z-1}e^{-t}\,dt\qquad (\Re {z}>0)}\\\\
+    \operatorname{B} (x,y)=\int _{0}^{1}t^{x-1}(1-t)^{y-1}\,dt\\\\
+    {\displaystyle \operatorname {erf} \left(x\right)={\frac {2}{\sqrt {\pi }}}\int _{0}^{x}e^{-t^{2}}\,dt}\\\\
+    第一種ベッセル関数\\\\
+    \displaystyle J_{\alpha }(x)=\sum _{m=0}^{\infty }{\frac  {(-1)^{m}}{m!\Gamma (m+\alpha +1)}}\left({\frac  {x}{2}}\right)^{2m+\alpha }\\\\
+    第二種ベッセル関数\\\\
+    \displaystyle Y_{\alpha }(x)={\frac  {J_{\alpha }(x)\cos(\alpha \pi )-J_{-\alpha }(x)}{\sin(\alpha \pi )}}\\\\
+    \zeta (s)=\sum _{n=1}^{\infty }{\frac  {1}{n^{s}}}\\\\
+    {\displaystyle \operatorname {Li} _{s}(z)=\sum _{k=1}^{\infty }{z^{k} \over k^{s}}}\\\\
+
+    \end{align}
+
+
+    <div onclick="obj=document.getElementById('open3').style; obj.display=(obj.display=='none')?'block':'none';">
+        <a style="cursor:pointer;">↓連立方程式</a>
+        </div>
+        
+        <!-- 折り畳まれ部分 -->
+        <div id="open3" style="display:none;clear:both;">
+        <form action="/連立方程式" method="POST">
+            <a>変数</a><input type="text" name="username" value='x'><input type="text" name="username1" value='y'><br>
+            <input type="text" name="username2" value='x+3*y+2'><a>=0</a><br>
+            <input type="text" name="username3" value='3*x+2*y+3'><a>=0</a>
+            <input type="submit">
+            </form>
+        </div>
+        <div onclick="obj=document.getElementById('open4').style; obj.display=(obj.display=='none')?'block':'none';">
+            <a style="cursor:pointer;">↓微分方程式</a>
+            </div>
+            
+            <!-- 折り畳まれ部分 -->
+            <div id="open4" style="display:none;clear:both;">
+            <form action="/微分方程式" method="POST">
+                <a>変数</a><input type="text" name="username" value='y'><input type="text" name="username2" value='x'><br>
+                <input type="text" name="username3" value={{bb}}><a>=0</a><br>
+                <a>初期値</a><input type="text" name="username4" value=0><br>
+            </a><input type="text" name="username5" value=0><a>=0
+                <input type="submit">
+                </form>
+            </div>
+            <button onclick="location.href='./book'">book</button>
+</body>
+</html>

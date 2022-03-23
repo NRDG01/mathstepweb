@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" async 
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+{% block content %}
+<body>
+
+		 
+    <div id="containter">
+        <form method="POST" action={{ur2}}>
+            {% if check2=='yes' %}
+            <input type="checkbox" id="anId1" class="wskCheckbox" name="hage" value="yes" checked/>
+            <label class="wskLabel" for="anId1">途中式を表示</label>
+            {% else %}
+            <input type="checkbox" id="anId1" class="wskCheckbox" name="hage" value="yes"/>
+            <label class="wskLabel" for="anId1">途中式を表示</label>
+            {% endif %}
+            <br></br>
+          <input class="textbox" type="text" name="username" value={{bb}} onEnter="send()" autocomplete="off" maxlength="60">
+          <div class="wrap">
+            <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
+                <button type="button" style="cursor:pointer;" class="button">定積分</button>
+                </div>
+            <input type="submit" class="button" name="se" value="不定積分" onclick={{ur}}><input type="submit" class="button" name="bi" value="微分" onclick={{ur}}>
+            <div onclick="obj=document.getElementById('open2').style; obj.display=(obj.display=='none')?'block':'none';">
+                <button type="button" style="cursor:pointer;" class="button">極限</button>
+                </div>
+            <input type="submit" class="button" name="max" value="極値" onclick={{ur}}>
+            <input type="submit" class="button" name="sol" value="方程式" onclick={{ur}}> 
+            <input type="submit" class="button" name="series" value="級数展開" onclick={{ur}}> 
+            <input type="submit" class="button" name="lap" value="ラプラス変換" onclick={{ur}}>   
+            <input type="submit" class="button" name="inlap" value="逆ラプラス" onclick={{ur}}>
+        </div>
+        <div id="open" style="display:none;clear:both;">
+            <br></br>
+            <div class="range">
+            <a>積分範囲:</a><input type="text" name="ini" value=0 class="text1"><a>から</a><input type="text" name="end" value=1 class="text1"><a>まで　</a>
+            
+            <button type="submit" class="fancy" href="#" name="tse">
+                <span class="top-key"></span>
+                <span class="text">計算　　</span>
+                <span class="bottom-key-1"></span>
+                <span class="bottom-key-2"></span>
+            </button>
+
+
+
+        </div> 
+        </div>
+        <div id="open2" style="display:none;clear:both;">
+            <br></br>
+            <div class="range">
+            <input type="text" name="moji" value='x' class="text1"><a>→</a><input type="text" name="end2" value=0 class="text1">
+            <button type="submit" class="fancy" href="#" name="lim">
+                <span class="top-key"></span>
+                <span class="text">計算　　</span>
+                <span class="bottom-key-1"></span>
+                <span class="bottom-key-2"></span>
+            </button>
+        </div>
+        </div>
+
+        </form>
+      </div>
+      
+      
+
+      
+    {% for i in aa %}
+    {% if loop.index %2==0 %}
+
+    \begin{align}
+    {{i}}
+    \end{align}
+    {% set cou=1 %}
+
+    {% else %}  
+    \begin{align}
+    {{i}}
+    &amp;\hspace{100cm} \\&amp;
+    \end{align}
+    
+    {% set cou=0 %}
+  
+    {% endif %}
+
+     {% endfor %}
+    
+
+     <div onclick="obj=document.getElementById('open3').style; obj.display=(obj.display=='none')?'block':'none';">
+        <button type="button" style="cursor:pointer;" class="button">Latex</button>
+        </div>
+    
+        <div id="open3" style="display:none;clear:both;">
+            {% for i in aa %}
+            <p>{{i}}</p>
+            {% endfor %}
+        </div>
+
+            <IMG SRC="data:image/png;base64,{{img_data}}" alt="img_data"  id="imgslot"/ width="600" height="500">
+            <IMG SRC="data:image/png;base64,{{img_data2}}" alt="img_data"  id="imgslot"/ width="600" height="500">
+            
+</body>
+{% endblock %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+</html>

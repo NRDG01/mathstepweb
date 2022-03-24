@@ -225,7 +225,6 @@ PyMuPDF==1.19.5
 PyNaCl==1.4.0
 pynndescent==0.5.5
 pyod==0.9.5
-pyodbc==4.0.0-unsupported
 pyOpenSSL==20.0.1
 pyparsing==2.4.7
 PyPDF2==1.26.0

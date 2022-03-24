@@ -1,7 +1,9 @@
-Flask==1.1.2
+flask==2.0.3
 matplotlib==3.3.4
 urllib3==1.26.4
 sympy==1.8
 numpy==1.19.5
 scipy==1.5.4
-base58==2.1.0
+base64==2.0
+decimal==2.3
+tempfile==1.0

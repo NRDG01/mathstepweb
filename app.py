@@ -1,8 +1,6 @@
 from urllib import request
 from flask import Flask,url_for
 from flask import render_template,request
-from matplotlib.transforms import BboxBase
-from sklearn.feature_extraction import img_to_graph
 import sympy
 from sympy.abc import *
 from sympy import * 

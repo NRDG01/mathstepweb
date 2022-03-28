@@ -72,7 +72,9 @@
         </form>
       </div>
       
-      
+      \begin{align}
+      {{fir}}&amp;\hspace{100cm} \\&amp;
+      \end{align} 
 
       
     {% for i in aa %}
@@ -95,20 +97,53 @@
 
      {% endfor %}
     
-
      <div onclick="obj=document.getElementById('open3').style; obj.display=(obj.display=='none')?'block':'none';">
-        <button type="button" style="cursor:pointer;" class="button">Latex</button>
+        <button type="submit" class="fancy2" href="#" name="lim">
+            <span class="top-key"></span>
+            <span class="text">\begin{align}\rm{Latex}　\end{align}</span>
+            <span class="bottom-key-1"></span>
+            <span class="bottom-key-2"></span>
+        </button> 
         </div>
-    
+
         <div id="open3" style="display:none;clear:both;">
             {% for i in aa %}
             <p>{{i}}</p>
             {% endfor %}
         </div>
-
+        <p></p>
+     <div onclick="obj=document.getElementById('plot').style; obj.display=(obj.display=='none')?'block':'none';">
+        <button type="submit" class="fancy2" href="#" name="lim">
+            <span class="top-key"></span>
+            <span class="text">\begin{align}　{{form}}をプロット　　\end{align}</span>
+            <span class="bottom-key-1"></span>
+            <span class="bottom-key-2"></span>
+        </button>
+        </div>
+        
+        <div id="plot" style="display:none;clear:both;">
             <IMG SRC="data:image/png;base64,{{img_data}}" alt="img_data"  id="imgslot"/ width="600" height="500">
-            <IMG SRC="data:image/png;base64,{{img_data2}}" alt="img_data"  id="imgslot"/ width="600" height="500">
-            
+                <IMG SRC="data:image/png;base64,{{img_data2}}" alt="img_data"  id="imgslot"/ width="600" height="500">
+    
+        </div>
+        <p></p>
+        {% if imgdata3!="" %}
+        <div onclick="obj=document.getElementById('plot2').style; obj.display=(obj.display=='none')?'block':'none';">
+           <button type="submit" class="fancy2" href="#" name="lim">
+               <span class="top-key"></span>
+               <span class="text">\begin{align}　{{res}}をプロット　　\end{align}</span>
+               <span class="bottom-key-1"></span>
+               <span class="bottom-key-2"></span>
+           </button>
+           </div>
+           
+           <div id="plot2" style="display:none;clear:both;">
+               <IMG SRC="data:image/png;base64,{{img_data3}}" alt="img_data"  id="imgslot"/ width="600" height="500">
+                   <IMG SRC="data:image/png;base64,{{img_data4}}" alt="img_data"  id="imgslot"/ width="600" height="500">
+                {% endif %}
+           </div>      
+        
+
 </body>
 {% endblock %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>

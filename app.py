@@ -37,18 +37,27 @@ def hello_world():
     ur="location.href='./'"
     ur2="./"
     check2='none'
+    img_data3=''
+    img_data4=''
     if request.method=='POST':
         check2=request.form.get('hage')
-        aa,bb,mo=requ(check2)
+        aa,bb,mo,gr=requ(check2)
         if check2=='yes':
             ur="location.href='./step'"
             ur2="./step"
         img_string=graph(simplify(bb),-2,2,mo)
         img_string2=graph(simplify(bb),-10,10,mo)
+        if gr[0]==1:
+            img_data3=graph(gr[3],-2,2,mo)
+            img_data4=graph(gr[3],-10,10,mo)
+        fir=gr[1]        
+        res=gr[2]
     else:
         img_string=graph(x,-2,2,x)
         img_string2=graph(x**2,-2,2,x)
-    return render_template('hello.html',aa=aa,bb=bb,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2)
+        fir=''
+        res=''
+    return render_template('hello.html',aa=aa,bb=bb,fir=fir,res=res,img_data4=img_data4,img_data3=img_data3,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2,form=latex(eval(bb)))
 
 @app.route("/step",methods=['GET','POST'])
 def hello_world2():
@@ -57,6 +66,8 @@ def hello_world2():
     ur="location.href='./step'"
     ur2="./step"
     check2='yes'
+    img_data3=''
+    img_data4=''
     if request.method=='POST':
         check2=request.form.get('hage')
         if check2=='yes':
@@ -65,13 +76,20 @@ def hello_world2():
             check2='none'
         else:
             check2='yes'
-        aa,bb,mo=requ(check2)
+        aa,bb,mo,gr=requ(check2)
         img_string=graph(simplify(bb),-2,2,mo)
         img_string2=graph(simplify(bb),-10,10,mo)
+        if gr[0]==1:
+            img_data3=graph(gr[3],-2,2,mo)
+            img_data4=graph(gr[3],-10,10,mo)
+        fir=gr[1]        
+        res=gr[2]
     else:
         img_string=graph(x,-2,2,x)
         img_string2=graph(x**2,-2,2,x)
-    return render_template('hello.html',aa=aa,bb=bb,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2)
+        res=''
+        fir=''
+    return render_template('hello.html',aa=aa,bb=bb,fir=fir,res=res,img_data4=img_data4,img_data3=img_data3,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2,form=latex(eval(bb)))
 
 
 
@@ -157,6 +175,8 @@ def graph(form,min,max,moji):
     try:
         xaa,yaa=graph_plot(form,min,max,moji)
         fig = plt.figure()
+        plt.title(str(min)+'<'+str(moji)+'<'+str(max))
+        plt.xlabel(str(moji))
         plt.grid()
         for i in range(len(xaa)):
             plt.plot(xaa[i],yaa[i],color='blue')
@@ -178,18 +198,25 @@ def graph(form,min,max,moji):
     return img_string
 
 def requ(check2):
+    gr=[0,'',0,0]
     ti1=time.time()
     bb=request.form["username"]
-    if (bb!=bb.replace('\\','')):
-        form=mat(bb)
-    else:
-        form=simplify(bb)
+    bb=siki(bb)
+    try:
+        if (bb!=bb.replace('\\','')):
+            form=mat(bb)
+        else:
+            form=simplify(bb)
+    except:
+        form=x
+
     mo=simplify(parse(form)[0])
     aa=[]
     try:
         aa=[request.form["tse"]]
         ini=request.form["ini"]
         end=request.form["end"]
+        gr=[1,'\\int_{'+ini+'}^{'+end+'}('+latex(form)+')d'+latex(mo),'\\int{'+latex(form)+'}d'+latex(mo),0]
         if check2=='yes':
             aa=set_step(form,ini,end,1,[],mo)  
         else:
@@ -215,15 +242,17 @@ def requ(check2):
             if check2=='yes':
                 aa=[request.form["se"]]
                 aa=set_step(form,0,0,0,[],'x')
+                gr=[1,'\\int{'+latex(form)+'}d'+latex(mo),'\\int{'+latex(form)+'}d'+latex(mo),0]
             else:
-              
+                aa=[request.form["se"]]
                 x=Symbol('x')
                 res=integrate(simplify(form), x)
                 if (str(res).replace('Integ','')!=str(res)):
                     aa=['解析的な結果が見つかりません.',latex(Integral(form,x))+'=?']
                 else:
                     aa=['','\\int('+latex(form)+')dx='+latex(res)]
-
+                    gr=[1,'\\int{'+latex(form)+'}d'+latex(mo),'\\int{'+latex(form)+'}d'+latex(mo),res]
+            
         except KeyError:
             aa=aa
         try:
@@ -260,6 +289,7 @@ def requ(check2):
                 aa=limi(form,end,1,[''],moji)[1]
             else:
                 aa=limi(form,end,0,[''],moji)[1]
+            gr=[0,'\\lim_{'+latex(moji)+'\\to '+latex(end)+'}\\left('+latex(form)+'\\right)',0,0]
         except KeyError:
             aa=aa     
         try:
@@ -268,6 +298,7 @@ def requ(check2):
                 aa=lap(form,1)
             else:
                 aa=lap(form,0)
+            gr=[1,'\\mathcal{L}_{x} \\left['+latex(form)+'\\right](s)','\\mathcal{L}_{x} \\left['+latex(form)+'\\right](s)',0]
         except KeyError:
             aa=aa   
         try:
@@ -276,11 +307,35 @@ def requ(check2):
                 aa=inlap(bb,1)
             else:
                 aa=inlap(bb,0)
+            gr=[1,'\\mathcal{L}_{s}^{-1} \\left['+latex(form)+'\\right](x)','\\mathcal{L}_{s}^{-1} \\left['+latex(form)+'\\right](x)',0]
         except KeyError:
             aa=aa
     ti2=time.time()      
-    aa[0]='処理時間:'+str(int((ti2-ti1)*100)/100)+'s　'+aa[0]   
-    return aa,bb,mo
+    gr[1]='処理時間:'+str(int((ti2-ti1)*100)/100)+'s　　入力解釈:　'+gr[1]+'　を求める.'  
+    return aa,bb,mo,gr
+
+
+def siki(form):
+    kansu=['sqrt','0#','abs','1#','delta','2#','sin','3#','cos','4#','tan','5#','log','6#','exp','7#','Si','8#','Ci','9#','asin','1##','acos','2##','atan','3##','arcsin','1##','arccos','2##','arctan','3##','Ei','4##','erfi','5##','erf','6##','csc','7##','sec','8##','cot','9##','sinh','0###','cosh','1###','tanh','2###','asinh','3###','acosh','4###','atanh','5###','arcsinh','3###','arccosh','4###','arctanh','5###','Ai','6###','Bi','7###']
+    form=form.replace('^','**')
+    form=form.replace(')(',')*(')
+    for i in range(int(len(kansu)/2)):
+        form=form.replace(kansu[2*i],kansu[2*i+1])
+    for i in range(10):
+        form=form.replace(str(i)+'(',str(i)+'*(')
+        form=form.replace(')'+str(i),')*'+str(i))
+    alp=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    for i in alp:
+        form=form.replace(i+'(',i+'*(')
+        form=form.replace(')'+i,')*'+i)
+        for j in range(10):
+            form=form.replace(str(j)+i,str(j)+'*'+i)
+        for j in alp:
+            form=form.replace(j+i,j+'*'+i)
+
+    for i in range(int(len(kansu)/2)):
+        form=form.replace(kansu[2*i+1],kansu[2*i])
+    return form
 
 def steps(rule,lat,yobi,moji):
         rule_kind=str(rule)[0:15]
@@ -1220,8 +1275,18 @@ def parse(form):
 
 ''' 
 cd flask
-set FLASK_APP=hello
+set FLASK_APP=app
 set FLASK_ENV=development
 flask run
+
+cd .ipynb_checkpoints
+cd Flask
+git init
+git add .
+git commit -m "update"
+heroku login
+
+git remote
+git push heroku-staging main
 '''
 

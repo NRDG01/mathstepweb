@@ -14,6 +14,18 @@
 {% block content %}
 <body>
 
+    <div onclick="obj=document.getElementById('use').style; obj.display=(obj.display=='none')?'block':'none';">
+        <button type="submit" class="fancy" href="#" name="lim">
+            <span class="top-key"></span>
+            <span class="text">使い方　</span>
+            <span class="bottom-key-1"></span>
+            <span class="bottom-key-2"></span>
+        </button> 
+        </div>
+
+        <div id="use" style="display:none;clear:both;">
+           <p>こんにちは</p>
+        </div>
 		 
     <div id="containter">
         <form method="POST" action={{ur2}}>
@@ -21,10 +33,13 @@
             <input type="checkbox" id="anId1" class="wskCheckbox" name="hage" value="yes" checked/>
             <label class="wskLabel" for="anId1">途中式を表示</label>
             {% else %}
-            <input type="checkbox" id="anId1" class="wskCheckbox" name="hage" value="yes"/>
-            <label class="wskLabel" for="anId1">途中式を表示</label>
+            <input type="checkbox" id="anId2" class="wskCheckbox" name="hage" value=""/>
+            <label class="wskLabel" for="anId2">途中式を表示</label>
             {% endif %}
+            
+
             <br></br>
+
           <input class="textbox" type="text" name="username" value={{bb}} onEnter="send()" autocomplete="off" maxlength="60">
           <div class="wrap">
             <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
@@ -127,7 +142,7 @@
     
         </div>
         <p></p>
-        {% if imgdata3!="" %}
+        {% if img_data3!="" %}
         <div onclick="obj=document.getElementById('plot2').style; obj.display=(obj.display=='none')?'block':'none';">
            <button type="submit" class="fancy2" href="#" name="lim">
                <span class="top-key"></span>

@@ -41,12 +41,12 @@ def hello_world():
     img_data4=''
     if request.method=='POST':
         check2=request.form.get('hage')
-        aa,bb,mo,gr=requ(check2)
+        aa,bb,mo,gr,rr=requ(check2)
         if check2=='yes':
             ur="location.href='./step'"
             ur2="./step"
-        img_string=graph(simplify(bb),-2,2,mo)
-        img_string2=graph(simplify(bb),-10,10,mo)
+        img_string=graph(simplify(rr),-2,2,mo)
+        img_string2=graph(simplify(rr),-10,10,mo)
         if gr[0]==1:
             img_data3=graph(gr[3],-2,2,mo)
             img_data4=graph(gr[3],-10,10,mo)
@@ -76,9 +76,9 @@ def hello_world2():
             check2='none'
         else:
             check2='yes'
-        aa,bb,mo,gr=requ(check2)
-        img_string=graph(simplify(bb),-2,2,mo)
-        img_string2=graph(simplify(bb),-10,10,mo)
+        aa,bb,mo,gr,rr=requ(check2)
+        img_string=graph(simplify(rr),-2,2,mo)
+        img_string2=graph(simplify(rr),-10,10,mo)
         if gr[0]==1:
             img_data3=graph(gr[3],-2,2,mo)
             img_data4=graph(gr[3],-10,10,mo)
@@ -146,7 +146,7 @@ def book():
 def graph_plot(form,mini,maxi,moji):
     f = lambdify(moji, form, 'numpy')
     max=30
-    xa=np.arange(mini, maxi, (maxi-mini)/400)
+    xa=np.arange(mini, maxi, (maxi-mini)/1000)
     for k in range(100):
         li=0
         ya=[]
@@ -198,20 +198,23 @@ def graph(form,min,max,moji):
     return img_string
 
 def requ(check2):
-    gr=[0,'',0,0]
+    gr=[0,'',0,0] #　グラフの表示の有無、ボタンに表示する関数、入力解釈、プロットする関数
     ti1=time.time()
     bb=request.form["username"]
     bb=siki(bb)
+    aa=[]
+
     try:
         if (bb!=bb.replace('\\','')):
             form=mat(bb)
         else:
             form=simplify(bb)
     except:
-        form=x
+        bb='x'
+        form=simplify('x')
 
-    mo=simplify(parse(form)[0])
-    aa=[]
+    moj,rr=parse(form)
+    mo=simplify(moj[0])
     try:
         aa=[request.form["tse"]]
         ini=request.form["ini"]
@@ -312,27 +315,50 @@ def requ(check2):
             aa=aa
     ti2=time.time()      
     gr[1]='処理時間:'+str(int((ti2-ti1)*100)/100)+'s　　入力解釈:　'+gr[1]+'　を求める.'  
-    return aa,bb,mo,gr
+    return aa,bb,mo,gr,rr
 
 
 def siki(form):
-    kansu=['sqrt','0#','abs','1#','delta','2#','sin','3#','cos','4#','tan','5#','log','6#','exp','7#','Si','8#','Ci','9#','asin','1##','acos','2##','atan','3##','arcsin','1##','arccos','2##','arctan','3##','Ei','4##','erfi','5##','erf','6##','csc','7##','sec','8##','cot','9##','sinh','0###','cosh','1###','tanh','2###','asinh','3###','acosh','4###','atanh','5###','arcsinh','3###','arccosh','4###','arctanh','5###','Ai','6###','Bi','7###']
+    kansu=['sqrt','$0###','abs','$1###','delta','$2###','asinh','$3###','acosh','$4###','atanh',
+    '$5###','log','$6###','exp','$7###','Si','$8###','Ci','$9###','asin','1##','acos','2##','atan',
+    '$3##','arcsinh','$3###','arccosh','$4###','arctanh','$5###','Ei','$4##','erfi','$5##','erf','$6##',
+    'csc','$7##','sec','$8##','cot','$9##','arcsin','$1##','arccos','$2##','arctan','$3##','sinh','$0#',
+    'cosh','$1#','tanh','$2#','sin','$3#','cos','$4#','tan','$5#','Ai','$6#','Bi','$7#']
     form=form.replace('^','**')
     form=form.replace(')(',')*(')
     for i in range(int(len(kansu)/2)):
         form=form.replace(kansu[2*i],kansu[2*i+1])
+    if (form!=form.replace('#','')):
+        print(form)
+        for i in range(100):
+            if i==len(form)-1:
+                break
+            if (form[i]=='#')and(form[i+1]!='(')and(form[i+1]!='#'):
+                if i+2==len(form):
+                    form=form[:i+1]+'('+form[i+1]+')'
+                else:
+                    for j in range(30):
+                        if i+2+j==len(form):
+                            form=form[:i+1]+'('+form[i+1:i+2+j]+')'
+                            break
+                        elif (form[i+2+j]=='$')or(form[i+2+j]=='+')or(form[i+2+j]=='-')or(form[i+2+j]=='*')or(form[i+2+j]=='/'):
+                            form=form[:i+1]+'('+form[i+1:i+2+j]+')'+form[i+2+j:]
+                            break
+                            
     for i in range(10):
         form=form.replace(str(i)+'(',str(i)+'*(')
+        form=form.replace(str(i)+'$',str(i)+'*$')
         form=form.replace(')'+str(i),')*'+str(i))
     alp=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     for i in alp:
         form=form.replace(i+'(',i+'*(')
+        form=form.replace(i+'$',i+'*$')
         form=form.replace(')'+i,')*'+i)
         for j in range(10):
             form=form.replace(str(j)+i,str(j)+'*'+i)
         for j in alp:
             form=form.replace(j+i,j+'*'+i)
-
+    form=form.replace(')$',')*$')
     for i in range(int(len(kansu)/2)):
         form=form.replace(kansu[2*i+1],kansu[2*i])
     return form
@@ -632,7 +658,7 @@ def dif(a,lat):
                     lat.append(latex(simplify(kou[i].replace('xi',rec[i+p]))))
     if len(lat)==0:
         lat.append('微分の公式より')
-        lat.append('('+latex(simplify(a))+")'="+latex(diff(simplify(a))))
+        lat.append('('+latex(simplify(a))+")'="+latex(diff(simplify(a),x)))
         lat.append('となる.')
     return lat
 
@@ -1097,7 +1123,7 @@ def lim(form,end,ss,lat):
         lat.append('\\lim_{x \\to '+str(end)+'+0}'+latex(form)+'='+latex(lim1)+',\\lim_{x \\to '+str(end)+'-0}'+latex(form)+'='+latex(lim2))
     return lat
 '''
-def lim(form,val,ss,lat,sit,moji):
+def lim(form,val,ss,lat,sit,moji,deep):
     val=simplify(val)
     ar=srepr(form)
     ar_r=form.args
@@ -1117,15 +1143,15 @@ def lim(form,val,ss,lat,sit,moji):
             lat.append('\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\log{'+latex(form)+'}=\\lim_{'+latex(moji)+'\\to '+latex(val)+'}'+latex(log(ar_r[0])*ar_r[1])+'')
             lat.append('となり,')
             rec=len(lat)
-            kai,lat=lim(log(ar_r[0])*ar_r[1],val,ss,lat,0,moji)
+            kai,lat=lim(log(ar_r[0])*ar_r[1],val,ss,lat,0,moji,deep+1)
             if (len(lat)-rec>5):
                 lat[-1]=lat[-1]+'したがって'
                 lat.append('\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\left('+latex(form)+'\\right)='+latex(exp(kai)))
                 lat.append('となる.')
             return kai,lat
         else:
-            lat=lim(ar_r[0],val,ss,lat,0,moji)[1]
-            lat=lim(ar_r[1],val,ss,lat,0,moji)[1]
+            lat=lim(ar_r[0],val,ss,lat,0,moji,deep+1)[1]
+            lat=lim(ar_r[1],val,ss,lat,0,moji,deep+1)[1]
             return 0,lat
     elif (ar[:3]=='Add')and(sit!=1):
         rec=len(lat)
@@ -1136,14 +1162,14 @@ def lim(form,val,ss,lat,sit,moji):
             if abs(ar_sub)==oo:
                 ar_hutei.append(ii)
             elif str(ar_sub)=='nan':
-                lat=lim(ii,val,ss,lat,0,moji)[1]
+                lat=lim(ii,val,ss,lat,0,moji,deep+1)[1]
             else:
                 siki2=siki2+ii
         siki=0
         for ii in ar_hutei:
             siki=siki+ii
         if len(ar_hutei)>0:
-            kai,lat=lim(siki,val,ss,lat,1,moji)
+            kai,lat=lim(siki,val,ss,lat,1,moji,deep+1)
         if (len(lat)-rec>5):
             lat[-1]=lat[-1]+'よって'
             lat.append('\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\left('+latex(form)+'\\right)='+latex(kai+siki2))
@@ -1183,7 +1209,7 @@ def lim(form,val,ss,lat,sit,moji):
                 dif3=dif1
             else:
                 dif3=dif2
-            if str(dif3.subs(moji,val))==str(dif3.subs(moji,val)).replace('Accum',''):#振動
+            if (str(dif3.subs(moji,val))==str(dif3.subs(moji,val)).replace('Accum',''))and(deep<10):#振動
                 if sit==2:
                     lat[-1]=lat[-1]+'再度, ロピタルの定理を用いて'
                 else:
@@ -1191,13 +1217,13 @@ def lim(form,val,ss,lat,sit,moji):
                 lat.append('\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\left('+latex(form)+'\\right)=\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\left('+latex(dif3)+'\\right)')
                 lat.append('となり,')
                 rec=len(lat)
-                kai,lat=lim(dif3,val,ss,lat,2,moji)
+                kai,lat=lim(dif3,val,ss,lat,2,moji,deep+1)
                 if (len(lat)-rec>5):
                     lat[-1]=lat[-1]+'よって'
                     lat.append('\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\left('+latex(form)+'\\right)='+latex(kai))
                     lat.append('となる.')
             else:
-                kai,lat=lim(form,val,ss,lat,3,moji)
+                kai,lat=lim(form,val,ss,lat,3,moji,deep+1)
             return kai,lat    
         else:
             kai=limit(form,moji,val)
@@ -1215,11 +1241,11 @@ def limi(form,val,ss,lat,moji):
     ii=0
     for i in range(2):
         if ss==2:
-            kai=lim(form,val,ss,lat,ii,moji)[0]
+            kai=lim(form,val,ss,lat,ii,moji,0)[0]
         elif ss==1:
-            kai,lat=lim(form,val,ss,lat,ii,moji)
+            kai,lat=lim(form,val,ss,lat,ii,moji,0)
         elif ss==0:
-            kai=lim(form,val,ss,lat,ii,moji)[0]
+            kai=lim(form,val,ss,lat,ii,moji,0)[0]
             lat=['']
             lat.append('\\lim_{'+latex(moji)+'\\to '+latex(val)+'}\\left('+latex(form)+'\\right)='+latex(kai)+'.')
         if (kai==0):
@@ -1247,7 +1273,7 @@ def resi(form,moji,z0):
             break
     return res
 
-def parse(form):
+def parse(form): #数式に使われている変数を認識して重要と考えられる順番に並べる関数, formはsympyの数式形式で入力
     ana = srepr(form)
     rr=[]
     for ii in range(100):
@@ -1271,7 +1297,10 @@ def parse(form):
                 br=br+1
     if len(rr)==0:
         rr=['x']
-    return rr
+    for i in range(len(rr)):
+        if i>0:
+            form=form.replace(simplify(rr[i]),1)
+    return rr,form
 
 ''' 
 cd flask

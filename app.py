@@ -1,6 +1,6 @@
 from urllib import request
 from flask import Flask,url_for
-from flask import render_template,request
+from flask import render_template,request, make_response
 import sympy
 from sympy.abc import *
 from sympy import * 
@@ -16,6 +16,8 @@ import tempfile
 from PIL import Image
 import io
 import matplotlib.pyplot as plt
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 app = Flask(__name__)
 @app.context_processor
@@ -30,6 +32,28 @@ def dated_url_for(endpoint, **values):
                                      endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
+@app.route("/download",methods=['GET','POST'])
+def downloadzip():
+    aa=request.form["file"]
+    aa=aa[1:]
+    aa=aa.replace('$','\\')
+    aa=aa.split('#')
+    
+    document = Document()
+    for i in range(len(aa)):
+        if i%2==0:
+            document.add_paragraph(aa[i])
+        else:
+            p=document.add_paragraph(aa[i])
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    filepath = os.path.join(tempfile.mkdtemp(),'test.docx')
+    document.save(filepath)
+    response = make_response()
+    response.data  = open(filepath, "rb").read()
+    response.headers['Content-Type'] = 'application/octet-stream'
+    response.headers['Content-Disposition'] = 'attachment; filename=test.docx'
+    return response
+
 @app.route("/",methods=['GET','POST'])
 def hello_world():
     aa=''
@@ -41,10 +65,11 @@ def hello_world():
     img_data4=''
     if request.method=='POST':
         check2=request.form.get('hage')
-        aa,bb,mo,gr,rr=requ(check2)
-        if check2=='yes':
+        if (check2=='yes')or(check2=='no'):
             ur="location.href='./step'"
             ur2="./step"
+            check2='yes'            
+        aa,bb,mo,gr,rr=requ(check2)
         img_string=graph(simplify(rr),-2,2,mo)
         img_string2=graph(simplify(rr),-10,10,mo)
         if gr[0]==1:
@@ -57,7 +82,11 @@ def hello_world():
         img_string2=graph(x**2,-2,2,x)
         fir=''
         res=''
-    return render_template('hello.html',aa=aa,bb=bb,fir=fir,res=res,img_data4=img_data4,img_data3=img_data3,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2,form=latex(eval(bb)))
+    cc=''
+    for i in range(len(aa)):
+        cc=cc+'#'+aa[i]
+    cc=cc.replace('\\','$')
+    return render_template('hello.html',aa=aa,bb=bb,cc=cc,fir=fir,res=res,img_data4=img_data4,img_data3=img_data3,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2,form=latex(eval(bb)))
 
 @app.route("/step",methods=['GET','POST'])
 def hello_world2():
@@ -89,7 +118,11 @@ def hello_world2():
         img_string2=graph(x**2,-2,2,x)
         res=''
         fir=''
-    return render_template('hello.html',aa=aa,bb=bb,fir=fir,res=res,img_data4=img_data4,img_data3=img_data3,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2,form=latex(eval(bb)))
+    cc=''
+    for i in range(len(aa)):
+        cc=cc+'#'+aa[i]
+    cc=cc.replace('\\','$')
+    return render_template('hello.html',aa=aa,bb=bb,cc=cc,fir=fir,res=res,img_data4=img_data4,img_data3=img_data3,check2=check2,ur=ur,ur2=ur2,img_data=img_string,img_data2=img_string2,form=latex(eval(bb)))
 
 
 
@@ -1318,4 +1351,6 @@ heroku login
 git remote
 git push heroku-staging main
 '''
+
+
 

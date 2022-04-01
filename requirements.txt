@@ -7,6 +7,7 @@ gunicorn==20.1.0
 itsdangerous==2.1.2
 Jinja2==3.1.0
 kiwisolver==1.4.0
+lxml==4.8.0
 MarkupSafe==2.1.1
 matplotlib==3.5.1
 mpmath==1.2.1
@@ -15,6 +16,7 @@ packaging==21.3
 Pillow==9.0.1
 pyparsing==3.0.7
 python-dateutil==2.8.2
+python-docx==0.8.11
 scipy==1.8.0
 six==1.16.0
 sympy==1.10.1

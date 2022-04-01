@@ -13,18 +13,24 @@
 </head>
 {% block content %}
 <body>
-
+    <p>テスト版</p>
     <div onclick="obj=document.getElementById('use').style; obj.display=(obj.display=='none')?'block':'none';">
-        <button type="submit" class="fancy" href="#" name="lim">
+        <button type="submit" class="fancy" href="#" name="use">
             <span class="top-key"></span>
             <span class="text">使い方　</span>
             <span class="bottom-key-1"></span>
             <span class="bottom-key-2"></span>
-        </button> 
+        </button>
+
         </div>
 
         <div id="use" style="display:none;clear:both;">
-           <p>こんにちは</p>
+            
+           <p>このサイトは入力されら問題に対して数式を変形し, 答えと途中過程を表示することができます.</p>
+           <p>四角形のボックスの中に数式を打ち込み, 行いたい動作を下のボタンから選択してください.</p>
+           <p>\begin{align}例:\text{x^2}→x^{2},　\text{2/x}→\frac{2}{x},　\text{sinxcosx+1/2}→\sin{x}\cos{x}+\frac{1}{2},　\text{(sinxcosx+1)/2}→\frac{\sin{x}\cos{x}+1}{2}\end{align}</p>
+           <p>例のように()の使い方によって, 解釈される数式が異なる場合があるため, 注意が必要です.</p>
+            
         </div>
 		 
     <div id="containter">
@@ -33,7 +39,7 @@
             <input type="checkbox" id="anId1" class="wskCheckbox" name="hage" value="yes" checked/>
             <label class="wskLabel" for="anId1">途中式を表示</label>
             {% else %}
-            <input type="checkbox" id="anId2" class="wskCheckbox" name="hage" value=""/>
+            <input type="checkbox" id="anId2" class="wskCheckbox" name="hage" value="no"/>
             <label class="wskLabel" for="anId2">途中式を表示</label>
             {% endif %}
             
@@ -111,7 +117,8 @@
     {% endif %}
 
      {% endfor %}
-    
+     
+
      <div onclick="obj=document.getElementById('open3').style; obj.display=(obj.display=='none')?'block':'none';">
         <button type="submit" class="fancy2" href="#" name="lim">
             <span class="top-key"></span>
@@ -157,8 +164,15 @@
                    <IMG SRC="data:image/png;base64,{{img_data4}}" alt="img_data"  id="imgslot"/ width="600" height="500">
                 {% endif %}
            </div>      
-        
-
+           <p></p>
+           <form method="POST" action="./download">
+            <button type="submit" class="fancy2" href="#" name="file" value="{{cc}}">
+                <span class="top-key"></span>
+                <span class="text">\begin{align}数式をWordファイルに変換する\end{align}</span>
+                <span class="bottom-key-1"></span>
+                <span class="bottom-key-2"></span>
+            </button> 
+        </form>
 </body>
 {% endblock %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>

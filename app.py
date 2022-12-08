@@ -17,7 +17,7 @@ from PIL import Image
 import io
 import matplotlib.pyplot as plt
 from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH,WD_TAB_ALIGNMENT
 
 app = Flask(__name__)
 @app.context_processor
@@ -42,9 +42,13 @@ def downloadzip():
     document = Document()
     for i in range(len(aa)):
         if i%2==0:
-            document.add_paragraph(aa[i])
+            p=document.add_paragraph()
+            p.add_run(text=aa[i], style=None).font.math = True
+            tabstops = p.paragraph_format.tab_stops
+            tabstops.add_tab_stop(0, WD_TAB_ALIGNMENT.START)
         else:
-            p=document.add_paragraph(aa[i])
+            p=document.add_paragraph()
+            p.add_run(text=aa[i], style=None).font.math = True
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     filepath = os.path.join(tempfile.mkdtemp(),'test.docx')
     document.save(filepath)
